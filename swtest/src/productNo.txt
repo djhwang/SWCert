@@ -1,0 +1,6 @@
+5
+4 adcb bdca
+5 ebdac eadcb
+6 ecfabd dfcaeb
+8 dgceabhf fhagbcde
+18 abcdefghijklmnopqr rqponmlkjihgfedcba
