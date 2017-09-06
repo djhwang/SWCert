@@ -8,10 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class ACMICPC1937 {
@@ -25,63 +21,67 @@ public class ACMICPC1937 {
 		FastScanner sc = new FastScanner(new FileInputStream("ACMICPC1937.txt"), System.out);
 
 		N = sc.nextInt();
-		data = new long[N][N];
-		dp = new long[N][N];
+		
+		data = new int[N][N];
+		dp = new int[N][N];
 		
 		for (int i = 0; i < N; i++) {
-			for (int j = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
 				data[i][j] = sc.nextInt();
 			}
 		}
 		
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				dfs(i,j,0);
+				traverse(i,j);
 			}
 		}
 		
+		System.out.println(max_days);
 		sc.close();
 	}
 	
-	private static int dfs(int i, int j, int ndays) {
-		// day 증가
-		int mineMax = ndays+1;
-		
+	private static int traverse(int i, int j) {
 		// check dp table
 		if (dp[i][j] > 0) {
 			return dp[i][j];
 		}
 		
-		
-		Queue queue = new ArrayDeque<>();
-		
-		if (i == 0) {
-			if (j == 0) {
-				// 오른쪽과 아래쪽만 체크한다.
-				if (data[i][j] < data[i][j+1]) {
-					dfs(i,j+1,ndays);
-				}
-			}
-			else {
-				
+		dp[i][j] = 1;
+
+		if (j < N-1) {
+			// right
+			if (data[i][j] < data[i][j+1]) {
+				dp[i][j] = Math.max(dp[i][j], traverse(i,j+1)+1);
 			}
 		}
 		
+		if (j > 0) {
+			// left
+			if (data[i][j] < data[i][j-1]) {
+				dp[i][j] = Math.max(dp[i][j], traverse(i,j-1)+1);
+			}
+		}
+		
+		if (i < N-1) {
+			// down
+			if (data[i][j] < data[i+1][j]) {
+				dp[i][j] = Math.max(dp[i][j], traverse(i+1,j)+1);
+			}
+		}
 		
 		if (i > 0) {
-			if (j > 0) {
-			}
-			else {
-				
-			}
-		}
-		else {
-			if (j > 0) {
-				
+			// up
+			if (data[i][j] < data[i-1][j]) {
+				dp[i][j] = Math.max(dp[i][j], traverse(i-1,j)+1);
 			}
 		}
 		
+		max_days = Math.max(max_days, dp[i][j]);
+		
+		return dp[i][j];
 	}
+	
 
 	static class FastScanner {
 		private final BufferedReader reader;
